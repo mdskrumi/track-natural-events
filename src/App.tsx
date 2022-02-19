@@ -47,7 +47,8 @@ const App = () => {
         y: -window.screen.availHeight,
         duration: 2,
       })
-      .to(initialGreetingRef.current, { opacity: 0, duration: 2 });
+      .to(initialGreetingRef.current, { opacity: 0, duration: 2 })
+      .to(initialGreetingRef.current, { zIndex: -1 });
   }, []);
 
   return (

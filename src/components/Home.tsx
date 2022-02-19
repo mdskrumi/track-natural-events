@@ -20,6 +20,14 @@ const MapWrapper = styled.div`
   opacity: 0;
 `;
 
+const LocationLatLongDiv = styled.div`
+  background-color: rgba(255, 255, 255, 0);
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  margin: 5px 0px 0px 10px;
+`;
+
 interface HomePropsInterface {
   userLocation: GeolocationPosition | undefined;
 }
@@ -52,10 +60,17 @@ const Home = (props: HomePropsInterface) => {
 
   return (
     <MapWrapper ref={mapWrapperDivRef}>
+      <LocationLatLongDiv>
+        {`Latitude: ${initialViewState.latitude.toFixed(
+          3
+        )} Longitude: ${initialViewState.longitude.toFixed(
+          3
+        )} Zoom: ${initialViewState.zoom.toFixed(0)}`}
+      </LocationLatLongDiv>
       <Map
         {...initialViewState}
         style={{ width: "100%", height: "100%" }}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapStyle="mapbox://styles/mapbox/dark-v10"
         mapboxAccessToken="pk.eyJ1IjoibWRza3J1bWkiLCJhIjoiY2t6cHJpODZrNWs4eTJ1cHE2d2gyamo3bCJ9._wPMQlwgpNT5DdxvacyRLQ"
         onMove={(evt) => setInitialViewState(evt.viewState)}
       >
