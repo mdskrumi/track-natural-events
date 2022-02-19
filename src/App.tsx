@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import gsap from "gsap";
 
@@ -32,6 +32,13 @@ const InitialGreeting = styled.div`
 
 const App = () => {
   const initialGreetingRef = useRef<HTMLDivElement>(null);
+  const [userLocation, setUserLocation] = useState<GeolocationPosition>();
+
+  useEffect(() => {
+    navigator.geolocation.watchPosition((position) => {
+      setUserLocation(position);
+    });
+  }, []);
 
   useEffect(() => {
     gsap
@@ -48,7 +55,7 @@ const App = () => {
       <InitialGreeting ref={initialGreetingRef}>
         Getting Your Map
       </InitialGreeting>
-      <Home />
+      <Home userLocation={userLocation} />
     </AppWrapper>
   );
 };
