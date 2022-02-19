@@ -39,7 +39,8 @@ const App = () => {
       .from(initialGreetingRef.current, {
         y: -window.screen.availHeight,
         duration: 2,
-      });
+      })
+      .to(initialGreetingRef.current, { opacity: 0, duration: 2 });
   }, []);
 
   return (
