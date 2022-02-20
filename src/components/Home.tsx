@@ -70,7 +70,7 @@ const Home = (props: HomePropsInterface) => {
       <Map
         {...initialViewState}
         style={{ width: "100%", height: "100%" }}
-        mapStyle="mapbox://styles/mapbox/dark-v10"
+        mapStyle="mapbox://styles/mapbox/streets-v11"
         mapboxAccessToken="pk.eyJ1IjoibWRza3J1bWkiLCJhIjoiY2t6cHJpODZrNWs4eTJ1cHE2d2gyamo3bCJ9._wPMQlwgpNT5DdxvacyRLQ"
         onMove={(evt) => setInitialViewState(evt.viewState)}
       >
