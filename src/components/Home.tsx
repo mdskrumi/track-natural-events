@@ -10,6 +10,7 @@ import Map, {
 import styled from "styled-components";
 import gsap from "gsap";
 import DeckGL from "@deck.gl/react";
+import { LineLayer } from "@deck.gl/layers";
 
 // Images
 import OFFICE_IMAGE from "../assets/images/office.png";
@@ -66,10 +67,8 @@ interface LineNaturalEventData {
 }
 
 interface LineNaturalEventDataSingle {
-  date: string;
-  type: string;
-  lat: number;
-  long: number;
+  from: number[];
+  to: number[];
 }
 
 const MAPBOX_ACCESS_TOKEN =
@@ -90,6 +89,7 @@ const Home = (props: HomePropsInterface) => {
   const [volcanoesData, setVolcanoesData] = useState<pointNaturalEventData[]>();
   const [showVolcanoesData, setShowVolcanoesData] = useState<boolean>(false);
 
+  const [stormLayers, setStormLayers] = useState<any>();
   const [severeStormData, setSevereStormData] =
     useState<LineNaturalEventData>();
   const [showSevereStormData, setShowSevereStormData] =
@@ -120,16 +120,15 @@ const Home = (props: HomePropsInterface) => {
           coordinates: evt.geometries[0].coordinates,
         });
       } else if (evt.categories[0].id === 10) {
-        const data: LineNaturalEventDataSingle[] = evt.geometries.map(
-          (g: any) => {
-            return {
-              date: g.date,
-              type: g.type,
-              lat: g.coordinates[0],
-              long: g.coordinates[1],
-            };
-          }
-        );
+        const data: LineNaturalEventDataSingle[] = [];
+        for (let i = 1; i < evt.geometries.length; i++) {
+          const from = evt.geometries[i - 1].coordinates;
+          const to = evt.geometries[i].coordinates;
+          data.push({
+            from,
+            to,
+          });
+        }
         setSevereStormData({
           id: evt.id,
           geometries: data,
@@ -138,6 +137,21 @@ const Home = (props: HomePropsInterface) => {
     });
     setWildFireData(wildFires);
     setVolcanoesData(volcanoes);
+  };
+
+  const handleShowSevereStorm = () => {
+    if (!showSevereStormData && severeStormData) {
+      const layer = new LineLayer({
+        id: "line-layer",
+        data: severeStormData.geometries,
+        pickable: true,
+        getWidth: 10,
+        getSourcePosition: (d: any) => d.from,
+        getTargetPosition: (d: any) => d.to,
+      });
+      setStormLayers(layer);
+    }
+    setShowSevereStormData(!showSevereStormData);
   };
 
   useEffect(() => {
@@ -163,7 +177,11 @@ const Home = (props: HomePropsInterface) => {
 
   return (
     <MapWrapper ref={mapWrapperDivRef}>
-      <DeckGL initialViewState={initialViewState} controller={true}>
+      <DeckGL
+        initialViewState={initialViewState}
+        controller={true}
+        layers={[stormLayers]}
+      >
         <LocationLatLongDiv>
           {`Latitude: ${initialViewState.latitude.toFixed(
             3
@@ -198,7 +216,7 @@ const Home = (props: HomePropsInterface) => {
           ) : null}
 
           {severeStormData ? (
-            <div onClick={() => setShowSevereStormData(!showSevereStormData)}>
+            <div onClick={handleShowSevereStorm}>
               Show Severe Storm
               <WildFireImage
                 src={STORM_IMAGE}
