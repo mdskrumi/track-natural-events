@@ -15,6 +15,7 @@ import DeckGL from "@deck.gl/react";
 import OFFICE_IMAGE from "../assets/images/office.png";
 import FIRE_IMAGE from "../assets/images/fire.png";
 import VOLCANO_IMAGE from "../assets/images/volcano.png";
+import STORM_IMAGE from "../assets/images/storm.png";
 
 const MapWrapper = styled.div`
   width: 100vw;
@@ -40,6 +41,7 @@ const ButtonDiv = styled.div`
   z-index: 1;
   margin: 5px 0px 0px 10px;
   cursor: pointer;
+  text-align: right;
 `;
 
 const WildFireImage = styled.img`
@@ -51,11 +53,23 @@ interface HomePropsInterface {
   userLocation: GeolocationPosition | undefined;
 }
 
-interface WildFireData {
+interface pointNaturalEventData {
   id: string;
   link: string;
   date: string;
   coordinates: number[];
+}
+
+interface LineNaturalEventData {
+  id: string;
+  geometries: LineNaturalEventDataSingle[];
+}
+
+interface LineNaturalEventDataSingle {
+  date: string;
+  type: string;
+  lat: number;
+  long: number;
 }
 
 const MAPBOX_ACCESS_TOKEN =
@@ -70,11 +84,16 @@ const Home = (props: HomePropsInterface) => {
     zoom: 3,
   });
 
-  const [wildFireData, setWildFireData] = useState<WildFireData[]>();
+  const [wildFireData, setWildFireData] = useState<pointNaturalEventData[]>();
   const [showFireData, setShowFireData] = useState<boolean>(false);
 
-  const [volcanoesData, setVolcanoesData] = useState<WildFireData[]>();
+  const [volcanoesData, setVolcanoesData] = useState<pointNaturalEventData[]>();
   const [showVolcanoesData, setShowVolcanoesData] = useState<boolean>(false);
+
+  const [severeStormData, setSevereStormData] =
+    useState<LineNaturalEventData>();
+  const [showSevereStormData, setShowSevereStormData] =
+    useState<boolean>(false);
 
   const mapWrapperDivRef = useRef<HTMLDivElement>(null);
 
@@ -82,8 +101,8 @@ const Home = (props: HomePropsInterface) => {
     const response = await fetch(
       "https://eonet.gsfc.nasa.gov/api/v2.1/events"
     ).then((res) => res.json());
-    const wildFires: WildFireData[] = [];
-    const volcanoes: WildFireData[] = [];
+    const wildFires: pointNaturalEventData[] = [];
+    const volcanoes: pointNaturalEventData[] = [];
 
     response.events.forEach((evt: any) => {
       if (evt.categories[0].id === 8) {
@@ -99,6 +118,21 @@ const Home = (props: HomePropsInterface) => {
           link: evt.sources[0].url,
           date: evt.geometries[0].date,
           coordinates: evt.geometries[0].coordinates,
+        });
+      } else if (evt.categories[0].id === 10) {
+        const data: LineNaturalEventDataSingle[] = evt.geometries.map(
+          (g: any) => {
+            return {
+              date: g.date,
+              type: g.type,
+              lat: g.coordinates[0],
+              long: g.coordinates[1],
+            };
+          }
+        );
+        setSevereStormData({
+          id: evt.id,
+          geometries: data,
         });
       }
     });
@@ -156,7 +190,19 @@ const Home = (props: HomePropsInterface) => {
               Show Volcanoes
               <WildFireImage
                 src={VOLCANO_IMAGE}
-                alt="fire"
+                alt="Volcanoes"
+                width="20"
+                height="15"
+              />
+            </div>
+          ) : null}
+
+          {severeStormData ? (
+            <div onClick={() => setShowSevereStormData(!showSevereStormData)}>
+              Show Severe Storm
+              <WildFireImage
+                src={STORM_IMAGE}
+                alt="STORM"
                 width="20"
                 height="15"
               />
