@@ -9,6 +9,7 @@ import Map, {
 } from "react-map-gl";
 import styled from "styled-components";
 import gsap from "gsap";
+import DeckGL from "@deck.gl/react";
 
 // Images
 import OFFICE_IMAGE from "../assets/images/office.png";
@@ -29,7 +30,7 @@ const LocationLatLongDiv = styled.div`
   margin: 5px 0px 0px 10px;
 `;
 
-const WildFireButtonDiv = styled.div`
+const ButtonDiv = styled.div`
   background-color: rgba(255, 255, 255, 0);
   color: black;
   position: absolute;
@@ -50,20 +51,27 @@ interface HomePropsInterface {
 }
 
 interface WildFireData {
+  id: string;
   link: string;
   date: string;
   coordinates: number[];
 }
 
+const MAPBOX_ACCESS_TOKEN =
+  "pk.eyJ1IjoibWRza3J1bWkiLCJhIjoiY2t6cHJpODZrNWs4eTJ1cHE2d2gyamo3bCJ9._wPMQlwgpNT5DdxvacyRLQ";
+
 const Home = (props: HomePropsInterface) => {
   const { userLocation } = props;
+
   const [initialViewState, setInitialViewState] = useState({
     longitude: 90,
     latitude: 23,
-    zoom: 1,
+    zoom: 3,
   });
+
   const [wildFireData, setWildFireData] = useState<WildFireData[]>();
   const [showFireData, setShowFireData] = useState<boolean>(false);
+
   const mapWrapperDivRef = useRef<HTMLDivElement>(null);
 
   const fetchFireData = async () => {
@@ -71,9 +79,11 @@ const Home = (props: HomePropsInterface) => {
       "https://eonet.gsfc.nasa.gov/api/v2.1/events"
     ).then((res) => res.json());
     const wildFires: WildFireData[] = [];
+
     response.events.forEach((evt: any) => {
       if (evt.categories[0].id === 8) {
         wildFires.push({
+          id: evt.id,
           link: evt.sources[0].url,
           date: evt.geometries[0].date,
           coordinates: evt.geometries[0].coordinates,
@@ -99,60 +109,63 @@ const Home = (props: HomePropsInterface) => {
       setInitialViewState({
         longitude: userLocation.coords.longitude,
         latitude: userLocation.coords.latitude,
-        zoom: 1,
+        zoom: 3,
       });
     }
   }, [userLocation]);
 
   return (
     <MapWrapper ref={mapWrapperDivRef}>
-      <LocationLatLongDiv>
-        {`Latitude: ${initialViewState.latitude.toFixed(
-          3
-        )} Longitude: ${initialViewState.longitude.toFixed(
-          3
-        )} Zoom: ${initialViewState.zoom.toFixed(0)}`}
-      </LocationLatLongDiv>
-      {wildFireData ? (
-        <WildFireButtonDiv onClick={() => setShowFireData(!showFireData)}>
-          Get fire data
-          <WildFireImage src={FIRE_IMAGE} alt="fire" width="20" height="15" />
-        </WildFireButtonDiv>
-      ) : null}
-      <Map
-        {...initialViewState}
-        style={{ width: "100%", height: "100%" }}
-        mapStyle="mapbox://styles/mapbox/streets-v10"
-        mapboxAccessToken="pk.eyJ1IjoibWRza3J1bWkiLCJhIjoiY2t6cHJpODZrNWs4eTJ1cHE2d2gyamo3bCJ9._wPMQlwgpNT5DdxvacyRLQ"
-        onMove={(evt) => setInitialViewState(evt.viewState)}
-      >
-        <FullscreenControl />
-        <GeolocateControl
-          trackUserLocation
-          showUserHeading
-          onTrackUserLocationStart={(evt: GeolocateEvent) => {
-            console.log(evt);
-          }}
-        />
-        <ScaleControl />
-        <NavigationControl visualizePitch />
+      <DeckGL initialViewState={initialViewState} controller={true}>
+        <LocationLatLongDiv>
+          {`Latitude: ${initialViewState.latitude.toFixed(
+            3
+          )} Longitude: ${initialViewState.longitude.toFixed(
+            3
+          )} Zoom: ${initialViewState.zoom.toFixed(0)}`}
+        </LocationLatLongDiv>
+        {wildFireData ? (
+          <ButtonDiv onClick={() => setShowFireData(!showFireData)}>
+            Show Wild Fire
+            <WildFireImage src={FIRE_IMAGE} alt="fire" width="20" height="15" />
+          </ButtonDiv>
+        ) : null}
 
-        {showFireData && wildFireData
-          ? wildFireData.map((wf) => (
-              <Marker
-                longitude={wf.coordinates[0]}
-                latitude={wf.coordinates[1]}
-                anchor="bottom"
-              >
-                <img src={FIRE_IMAGE} alt="wild fire" />
-              </Marker>
-            ))
-          : null}
+        <Map
+          style={{ width: "100%", height: "100%" }}
+          mapStyle="mapbox://styles/mapbox/streets-v10"
+          mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
+          onMove={(evt) => setInitialViewState(evt.viewState)}
+        >
+          <FullscreenControl />
+          <GeolocateControl
+            trackUserLocation
+            showUserHeading
+            onTrackUserLocationStart={(evt: GeolocateEvent) => {
+              console.log(evt);
+            }}
+          />
+          <ScaleControl />
+          <NavigationControl visualizePitch />
 
-        <Marker longitude={90.4001656} latitude={23.781855} anchor="bottom">
-          <img src={OFFICE_IMAGE} alt="office" />
-        </Marker>
-      </Map>
+          {showFireData && wildFireData
+            ? wildFireData.map((wf) => (
+                <Marker
+                  key={wf.id}
+                  longitude={wf.coordinates[0]}
+                  latitude={wf.coordinates[1]}
+                  anchor="bottom"
+                >
+                  <img src={FIRE_IMAGE} alt="wild fire" />
+                </Marker>
+              ))
+            : null}
+
+          <Marker longitude={90.4001656} latitude={23.781855} anchor="bottom">
+            <img src={OFFICE_IMAGE} alt="office" />
+          </Marker>
+        </Map>
+      </DeckGL>
     </MapWrapper>
   );
 };
