@@ -125,9 +125,16 @@ const Home = (props: HomePropsInterface) => {
           )} Zoom: ${initialViewState.zoom.toFixed(0)}`}
         </LocationLatLongDiv>
         {wildFireData ? (
-          <ButtonDiv onClick={() => setShowFireData(!showFireData)}>
-            Show Wild Fire
-            <WildFireImage src={FIRE_IMAGE} alt="fire" width="20" height="15" />
+          <ButtonDiv>
+            <div onClick={() => setShowFireData(!showFireData)}>
+              Show Wild Fire
+              <WildFireImage
+                src={FIRE_IMAGE}
+                alt="fire"
+                width="20"
+                height="15"
+              />
+            </div>
           </ButtonDiv>
         ) : null}
 
