@@ -14,6 +14,7 @@ import DeckGL from "@deck.gl/react";
 // Images
 import OFFICE_IMAGE from "../assets/images/office.png";
 import FIRE_IMAGE from "../assets/images/fire.png";
+import VOLCANO_IMAGE from "../assets/images/volcano.png";
 
 const MapWrapper = styled.div`
   width: 100vw;
@@ -72,6 +73,9 @@ const Home = (props: HomePropsInterface) => {
   const [wildFireData, setWildFireData] = useState<WildFireData[]>();
   const [showFireData, setShowFireData] = useState<boolean>(false);
 
+  const [volcanoesData, setVolcanoesData] = useState<WildFireData[]>();
+  const [showVolcanoesData, setShowVolcanoesData] = useState<boolean>(false);
+
   const mapWrapperDivRef = useRef<HTMLDivElement>(null);
 
   const fetchFireData = async () => {
@@ -79,6 +83,7 @@ const Home = (props: HomePropsInterface) => {
       "https://eonet.gsfc.nasa.gov/api/v2.1/events"
     ).then((res) => res.json());
     const wildFires: WildFireData[] = [];
+    const volcanoes: WildFireData[] = [];
 
     response.events.forEach((evt: any) => {
       if (evt.categories[0].id === 8) {
@@ -88,9 +93,17 @@ const Home = (props: HomePropsInterface) => {
           date: evt.geometries[0].date,
           coordinates: evt.geometries[0].coordinates,
         });
+      } else if (evt.categories[0].id === 12) {
+        volcanoes.push({
+          id: evt.id,
+          link: evt.sources[0].url,
+          date: evt.geometries[0].date,
+          coordinates: evt.geometries[0].coordinates,
+        });
       }
     });
     setWildFireData(wildFires);
+    setVolcanoesData(volcanoes);
   };
 
   useEffect(() => {
@@ -124,8 +137,9 @@ const Home = (props: HomePropsInterface) => {
             3
           )} Zoom: ${initialViewState.zoom.toFixed(0)}`}
         </LocationLatLongDiv>
-        {wildFireData ? (
-          <ButtonDiv>
+
+        <ButtonDiv>
+          {wildFireData ? (
             <div onClick={() => setShowFireData(!showFireData)}>
               Show Wild Fire
               <WildFireImage
@@ -135,8 +149,20 @@ const Home = (props: HomePropsInterface) => {
                 height="15"
               />
             </div>
-          </ButtonDiv>
-        ) : null}
+          ) : null}
+
+          {volcanoesData ? (
+            <div onClick={() => setShowVolcanoesData(!showVolcanoesData)}>
+              Show Volcanoes
+              <WildFireImage
+                src={VOLCANO_IMAGE}
+                alt="fire"
+                width="20"
+                height="15"
+              />
+            </div>
+          ) : null}
+        </ButtonDiv>
 
         <Map
           style={{ width: "100%", height: "100%" }}
@@ -164,6 +190,19 @@ const Home = (props: HomePropsInterface) => {
                   anchor="bottom"
                 >
                   <img src={FIRE_IMAGE} alt="wild fire" />
+                </Marker>
+              ))
+            : null}
+
+          {showVolcanoesData && volcanoesData
+            ? volcanoesData.map((wf) => (
+                <Marker
+                  key={wf.id}
+                  longitude={wf.coordinates[0]}
+                  latitude={wf.coordinates[1]}
+                  anchor="bottom"
+                >
+                  <img src={VOLCANO_IMAGE} alt="volcano" />
                 </Marker>
               ))
             : null}
