@@ -145,13 +145,17 @@ const Home = (props: HomePropsInterface) => {
         id: "line-layer",
         data: severeStormData.geometries,
         pickable: true,
+        getColor: [128, 128, 128],
         getWidth: 10,
         getSourcePosition: (d: any) => d.from,
         getTargetPosition: (d: any) => d.to,
       });
       setStormLayers(layer);
+      setShowSevereStormData(true);
+    } else {
+      setStormLayers(null);
+      setShowSevereStormData(false);
     }
-    setShowSevereStormData(!showSevereStormData);
   };
 
   useEffect(() => {
