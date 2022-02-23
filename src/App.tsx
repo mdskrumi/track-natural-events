@@ -82,7 +82,7 @@ const App = () => {
         </MapNumberButtonDiv>
       ) : null}
       {mapNumber === 1 ? (
-        <Map userLocation={userLocation} divideStyle={null} />
+        <Map userLocation={userLocation} divideStyle={null} mapType={0} />
       ) : null}
       {mapNumber === 4 ? <FourMap /> : null}
     </AppWrapper>

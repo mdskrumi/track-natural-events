@@ -17,6 +17,7 @@ import {
 interface MapPropsInterface {
   userLocation: GeolocationPosition | undefined;
   divideStyle: DivideStyleInterface | null;
+  mapType: number;
 }
 
 const MAPBOX_ACCESS_TOKEN =
@@ -30,14 +31,16 @@ const MAP_STYLES: MapStyleInterface[] = [
 ];
 
 const Home = (props: MapPropsInterface) => {
-  const { userLocation, divideStyle } = props;
+  const { userLocation, divideStyle, mapType } = props;
 
   const [initialViewState, setInitialViewState] = useState({
     longitude: 90,
     latitude: 23,
     zoom: 3,
   });
-  const [mapStyle, setMapStyle] = useState<string>(MAP_STYLES[0].url);
+  const [mapStyle, setMapStyle] = useState<string>(
+    MAP_STYLES[mapType] ? MAP_STYLES[mapType].url : MAP_STYLES[0].url
+  );
   const [wildFireData, setWildFireData] = useState<pointNaturalEventData[]>();
   const [showFireData, setShowFireData] = useState<boolean>(false);
   const [volcanoesData, setVolcanoesData] = useState<pointNaturalEventData[]>();
@@ -156,6 +159,7 @@ const Home = (props: MapPropsInterface) => {
       MAPBOX_ACCESS_TOKEN={MAPBOX_ACCESS_TOKEN}
       setMapStyle={setMapStyle}
       MAP_STYLES={MAP_STYLES}
+      mapType={mapType}
     />
   );
 };

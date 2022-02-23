@@ -69,6 +69,7 @@ export interface ViewPropsInterface {
   MAPBOX_ACCESS_TOKEN: string;
   MAP_STYLES: MapStyleInterface[];
   divideStyle: DivideStyleInterface | null;
+  mapType: number;
 }
 
 const View = (props: ViewPropsInterface) => {
@@ -90,6 +91,7 @@ const View = (props: ViewPropsInterface) => {
     setMapStyle,
     MAP_STYLES,
     divideStyle,
+    mapType,
   } = props;
 
   console.log(divideStyle);
@@ -184,8 +186,10 @@ const View = (props: ViewPropsInterface) => {
         </Map>
 
         <ChooseMapStyleSelect onChange={(evt) => setMapStyle(evt.target.value)}>
-          {MAP_STYLES.map((style) => (
-            <option value={style.url}>{style.name.toUpperCase()}</option>
+          {MAP_STYLES.map((style, index) => (
+            <option selected={mapType === index} value={style.url}>
+              {style.name.toUpperCase()}
+            </option>
           ))}
         </ChooseMapStyleSelect>
       </DeckGL>
