@@ -3,7 +3,7 @@ import styled from "styled-components";
 import gsap from "gsap";
 
 // Components
-import Home from "./components/Home";
+import Map from "./components/Map";
 
 // CSS
 import "./App.css";
@@ -30,9 +30,51 @@ const InitialGreeting = styled.div`
   }
 `;
 
+const MapNumberButtonDiv = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin: auto;
+  transform: translate(-50%, -50%);
+  display: flex;
+`;
+
+const ChooseMapDiv = styled.div`
+  cursor: default;
+`;
+
+const MapNumberButton = styled.div`
+  padding: 10px;
+  font-size: 48px;
+  cursor: pointer;
+  &:hover {
+    color: red;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 32px;
+  }
+  @media (max-width: 480px) {
+    font-size: 24px;
+  }
+`;
+
 const App = () => {
   const initialGreetingRef = useRef<HTMLDivElement>(null);
+  const chooseMapRef = useRef<HTMLDivElement>(null);
+  const fourMapRef = useRef<HTMLDivElement>(null);
+  const oneMapRef = useRef<HTMLDivElement>(null);
+
+  const [mapNumber, setMapNumber] = useState<number>(0);
   const [userLocation, setUserLocation] = useState<GeolocationPosition>();
+
+  const handleOnMapSelect = (num: number) => {
+    setMapNumber(num);
+    gsap
+      .timeline()
+      .to(initialGreetingRef.current, { opacity: 0, duration: 2 })
+      .to(initialGreetingRef.current, { zIndex: -1 });
+  };
 
   useEffect(() => {
     navigator.geolocation.watchPosition((position) => {
@@ -41,14 +83,25 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    gsap
-      .timeline()
-      .from(initialGreetingRef.current, {
-        y: -window.screen.availHeight,
-        duration: 2,
-      })
-      .to(initialGreetingRef.current, { opacity: 0, duration: 2 })
-      .to(initialGreetingRef.current, { zIndex: -1 });
+    gsap.timeline().from(initialGreetingRef.current, {
+      y: -window.screen.availHeight,
+      duration: 2,
+    });
+
+    gsap.timeline().from(chooseMapRef.current, {
+      x: -window.screen.availWidth,
+      duration: 2,
+    });
+
+    gsap.timeline().from(fourMapRef.current, {
+      y: -window.screen.availHeight,
+      duration: 2,
+    });
+
+    gsap.timeline().from(oneMapRef.current, {
+      x: window.screen.availWidth,
+      duration: 2,
+    });
   }, []);
 
   return (
@@ -56,7 +109,23 @@ const App = () => {
       <InitialGreeting ref={initialGreetingRef}>
         Getting Your Map
       </InitialGreeting>
-      <Home userLocation={userLocation} />
+
+      {mapNumber === 0 ? (
+        <MapNumberButtonDiv>
+          <ChooseMapDiv ref={chooseMapRef}> Choose Map</ChooseMapDiv>
+          <MapNumberButton
+            ref={fourMapRef}
+            onClick={() => handleOnMapSelect(4)}
+          >
+            4x4
+          </MapNumberButton>
+          <MapNumberButton ref={oneMapRef} onClick={() => handleOnMapSelect(1)}>
+            1x1
+          </MapNumberButton>
+        </MapNumberButtonDiv>
+      ) : null}
+      {mapNumber === 1 ? <Map userLocation={userLocation} /> : null}
+      {mapNumber === 4 ? <Map userLocation={userLocation} /> : null}
     </AppWrapper>
   );
 };
