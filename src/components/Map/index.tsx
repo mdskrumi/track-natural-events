@@ -11,10 +11,12 @@ import {
   LineNaturalEventDataSingle,
   MapStyleInterface,
   pointNaturalEventData,
+  DivideStyleInterface,
 } from "./view";
 
 interface MapPropsInterface {
   userLocation: GeolocationPosition | undefined;
+  divideStyle: DivideStyleInterface | null;
 }
 
 const MAPBOX_ACCESS_TOKEN =
@@ -28,7 +30,7 @@ const MAP_STYLES: MapStyleInterface[] = [
 ];
 
 const Home = (props: MapPropsInterface) => {
-  const { userLocation } = props;
+  const { userLocation, divideStyle } = props;
 
   const [initialViewState, setInitialViewState] = useState({
     longitude: 90,
@@ -137,6 +139,7 @@ const Home = (props: MapPropsInterface) => {
 
   return (
     <View
+      divideStyle={divideStyle}
       mapWrapperDivRef={mapWrapperDivRef}
       initialViewState={initialViewState}
       setInitialViewState={setInitialViewState}

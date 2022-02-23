@@ -44,6 +44,13 @@ export interface MapStyleInterface {
   url: string;
 }
 
+export interface DivideStyleInterface {
+  top: string;
+  bottom: string;
+  left: string;
+  right: string;
+}
+
 export interface ViewPropsInterface {
   mapWrapperDivRef: React.RefObject<HTMLDivElement>;
   initialViewState: ViewStateInterface;
@@ -61,6 +68,7 @@ export interface ViewPropsInterface {
   setMapStyle: Function;
   MAPBOX_ACCESS_TOKEN: string;
   MAP_STYLES: MapStyleInterface[];
+  divideStyle: DivideStyleInterface | null;
 }
 
 const View = (props: ViewPropsInterface) => {
@@ -81,7 +89,10 @@ const View = (props: ViewPropsInterface) => {
     MAPBOX_ACCESS_TOKEN,
     setMapStyle,
     MAP_STYLES,
+    divideStyle,
   } = props;
+
+  console.log(divideStyle);
 
   return (
     <MapWrapper ref={mapWrapperDivRef}>
@@ -90,6 +101,9 @@ const View = (props: ViewPropsInterface) => {
         onViewStateChange={({ viewState }) => setInitialViewState(viewState)}
         controller={true}
         layers={[stormLayers]}
+        width={divideStyle ? "50%" : "100%"}
+        height={divideStyle ? "50%" : "100%"}
+        style={divideStyle ? divideStyle : {}}
       >
         <LocationLatLongDiv>
           {`Latitude: ${initialViewState.latitude.toFixed(
@@ -168,13 +182,13 @@ const View = (props: ViewPropsInterface) => {
             <img src={OFFICE_IMAGE} alt="office" />
           </Marker>
         </Map>
-      </DeckGL>
 
-      <ChooseMapStyleSelect onChange={(evt) => setMapStyle(evt.target.value)}>
-        {MAP_STYLES.map((style) => (
-          <option value={style.url}>{style.name.toUpperCase()}</option>
-        ))}
-      </ChooseMapStyleSelect>
+        <ChooseMapStyleSelect onChange={(evt) => setMapStyle(evt.target.value)}>
+          {MAP_STYLES.map((style) => (
+            <option value={style.url}>{style.name.toUpperCase()}</option>
+          ))}
+        </ChooseMapStyleSelect>
+      </DeckGL>
     </MapWrapper>
   );
 };
