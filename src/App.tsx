@@ -4,60 +4,16 @@ import gsap from "gsap";
 
 // Components
 import Map from "./components/Map";
+import FourMap from "./components/FourMap";
 
-// CSS
-import "./App.css";
-
-const AppWrapper = styled.div`
-  color: #ffffff;
-  font-family: "Akaya Telivigala", cursive;
-  font-family: "Bebas Neue", cursive;
-  font-family: "Oswald", sans-serif;
-  min-height: 100vh;
-`;
-
-const InitialGreeting = styled.div`
-  z-index: 1;
-  font-size: 64px;
-  position: fixed;
-  top: 30%;
-  left: 10%;
-  @media (max-width: 768px) {
-    font-size: 48px;
-  }
-  @media (max-width: 480px) {
-    font-size: 32px;
-  }
-`;
-
-const MapNumberButtonDiv = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  margin: auto;
-  transform: translate(-50%, -50%);
-  display: flex;
-`;
-
-const ChooseMapDiv = styled.div`
-  cursor: default;
-`;
-
-const MapNumberButton = styled.div`
-  padding: 10px;
-  font-size: 48px;
-  cursor: pointer;
-  &:hover {
-    color: red;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 32px;
-  }
-  @media (max-width: 480px) {
-    font-size: 24px;
-  }
-`;
+// Style
+import GlobalStyle, {
+  AppWrapper,
+  ChooseMapDiv,
+  InitialGreeting,
+  MapNumberButton,
+  MapNumberButtonDiv,
+} from "./style";
 
 const App = () => {
   const initialGreetingRef = useRef<HTMLDivElement>(null);
@@ -106,6 +62,7 @@ const App = () => {
 
   return (
     <AppWrapper>
+      <GlobalStyle />
       <InitialGreeting ref={initialGreetingRef}>
         Getting Your Map
       </InitialGreeting>
@@ -125,7 +82,7 @@ const App = () => {
         </MapNumberButtonDiv>
       ) : null}
       {mapNumber === 1 ? <Map userLocation={userLocation} /> : null}
-      {mapNumber === 4 ? <Map userLocation={userLocation} /> : null}
+      {mapNumber === 4 ? <FourMap /> : null}
     </AppWrapper>
   );
 };
