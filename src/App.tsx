@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import gsap from "gsap";
 
 // Components
@@ -22,7 +21,6 @@ const App = () => {
   const oneMapRef = useRef<HTMLDivElement>(null);
 
   const [mapNumber, setMapNumber] = useState<number>(0);
-  const [userLocation, setUserLocation] = useState<GeolocationPosition>();
 
   const handleOnMapSelect = (num: number) => {
     setMapNumber(num);
@@ -31,12 +29,6 @@ const App = () => {
       .to(initialGreetingRef.current, { opacity: 0, duration: 2 })
       .to(initialGreetingRef.current, { zIndex: -1 });
   };
-
-  useEffect(() => {
-    navigator.geolocation.watchPosition((position) => {
-      setUserLocation(position);
-    });
-  }, []);
 
   useEffect(() => {
     gsap.timeline().from(initialGreetingRef.current, {
@@ -80,11 +72,11 @@ const App = () => {
             1x1
           </MapNumberButton>
         </MapNumberButtonDiv>
+      ) : mapNumber === 1 ? (
+        <Map divideStyle={null} mapType={0} />
+      ) : mapNumber === 4 ? (
+        <FourMap />
       ) : null}
-      {mapNumber === 1 ? (
-        <Map userLocation={userLocation} divideStyle={null} mapType={0} />
-      ) : null}
-      {mapNumber === 4 ? <FourMap /> : null}
     </AppWrapper>
   );
 };

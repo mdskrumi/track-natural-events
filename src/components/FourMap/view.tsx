@@ -5,7 +5,6 @@ const View = () => {
   return (
     <FourMapWrapperDiv>
       <Map
-        userLocation={undefined}
         divideStyle={{
           top: "0%",
           bottom: "50%",
@@ -15,7 +14,6 @@ const View = () => {
         mapType={10}
       />
       <Map
-        userLocation={undefined}
         divideStyle={{
           top: "0%",
           bottom: "45%",
@@ -25,7 +23,6 @@ const View = () => {
         mapType={1}
       />
       <Map
-        userLocation={undefined}
         divideStyle={{
           top: "50%",
           bottom: "0%",
@@ -35,7 +32,6 @@ const View = () => {
         mapType={2}
       />
       <Map
-        userLocation={undefined}
         divideStyle={{
           top: "50%",
           bottom: "0%",

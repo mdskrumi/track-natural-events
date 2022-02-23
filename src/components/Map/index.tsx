@@ -15,7 +15,6 @@ import {
 } from "./view";
 
 interface MapPropsInterface {
-  userLocation: GeolocationPosition | undefined;
   divideStyle: DivideStyleInterface | null;
   mapType: number;
 }
@@ -31,7 +30,7 @@ const MAP_STYLES: MapStyleInterface[] = [
 ];
 
 const Home = (props: MapPropsInterface) => {
-  const { userLocation, divideStyle, mapType } = props;
+  const { divideStyle, mapType } = props;
 
   const [initialViewState, setInitialViewState] = useState({
     longitude: 90,
@@ -129,16 +128,6 @@ const Home = (props: MapPropsInterface) => {
       .to(mapWrapperDivRef.current, { duration: 2 })
       .to(mapWrapperDivRef.current, { opacity: 1, duration: 4 });
   }, []);
-
-  useEffect(() => {
-    if (userLocation) {
-      setInitialViewState({
-        longitude: userLocation.coords.longitude,
-        latitude: userLocation.coords.latitude,
-        zoom: 3,
-      });
-    }
-  }, [userLocation]);
 
   return (
     <View

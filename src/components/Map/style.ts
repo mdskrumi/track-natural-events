@@ -15,6 +15,16 @@ export const LocationLatLongDiv = styled.div`
   top: 0;
   z-index: 1;
   margin: 5px 0px 0px 10px;
+  @media (max-width: 768px) {
+    font-size: 12px;
+    top: auto;
+    bottom: 0;
+  }
+  @media (max-width: 480px) {
+    font-size: 8px;
+    top: auto;
+    bottom: 0;
+  }
 `;
 
 export const ButtonDiv = styled.div`
@@ -27,6 +37,13 @@ export const ButtonDiv = styled.div`
   margin: 5px 0px 0px 10px;
   cursor: pointer;
   text-align: right;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+  @media (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 export const WildFireImage = styled.img`
@@ -44,4 +61,11 @@ export const ChooseMapStyleSelect = styled.select`
   right: 0;
   z-index: 1;
   margin: 5px 0px 0px 10px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+  @media (max-width: 480px) {
+    font-size: 10px;
+  }
 `;

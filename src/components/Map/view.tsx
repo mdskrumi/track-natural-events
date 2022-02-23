@@ -94,8 +94,6 @@ const View = (props: ViewPropsInterface) => {
     mapType,
   } = props;
 
-  console.log(divideStyle);
-
   return (
     <MapWrapper ref={mapWrapperDivRef}>
       <DeckGL
@@ -187,7 +185,7 @@ const View = (props: ViewPropsInterface) => {
 
         <ChooseMapStyleSelect onChange={(evt) => setMapStyle(evt.target.value)}>
           {MAP_STYLES.map((style, index) => (
-            <option selected={mapType === index} value={style.url}>
+            <option key={style.name} defaultValue={mapType} value={style.url}>
               {style.name.toUpperCase()}
             </option>
           ))}
