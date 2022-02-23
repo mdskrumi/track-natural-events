@@ -152,6 +152,11 @@ const Home = (props: HomePropsInterface) => {
       });
       setStormLayers(layer);
       setShowSevereStormData(true);
+      setInitialViewState({
+        longitude: severeStormData.geometries[0].from[0],
+        latitude: severeStormData.geometries[0].from[1],
+        zoom: 5,
+      });
     } else {
       setStormLayers(null);
       setShowSevereStormData(false);
