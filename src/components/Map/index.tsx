@@ -148,7 +148,6 @@ const Home = (props: MapPropsInterface) => {
       MAPBOX_ACCESS_TOKEN={MAPBOX_ACCESS_TOKEN}
       setMapStyle={setMapStyle}
       MAP_STYLES={MAP_STYLES}
-      mapType={mapType}
     />
   );
 };

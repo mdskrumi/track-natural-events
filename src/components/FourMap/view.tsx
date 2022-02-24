@@ -11,7 +11,7 @@ const View = () => {
           left: "0%",
           right: "50%",
         }}
-        mapType={10}
+        mapType={0}
       />
       <Map
         divideStyle={{

@@ -1,6 +1,9 @@
 import Map, { Marker } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 
+// Other Components
+import ToggleButton from "../ToggleButton";
+
 // Styles
 import {
   MapWrapper,
@@ -69,7 +72,6 @@ export interface ViewPropsInterface {
   MAPBOX_ACCESS_TOKEN: string;
   MAP_STYLES: MapStyleInterface[];
   divideStyle: DivideStyleInterface | null;
-  mapType: number;
 }
 
 const View = (props: ViewPropsInterface) => {
@@ -91,7 +93,6 @@ const View = (props: ViewPropsInterface) => {
     setMapStyle,
     MAP_STYLES,
     divideStyle,
-    mapType,
   } = props;
 
   return (
@@ -115,27 +116,21 @@ const View = (props: ViewPropsInterface) => {
 
         <ButtonDiv>
           {wildFireData ? (
-            <div onClick={() => setShowFireData(!showFireData)}>
-              Show Wild Fire
-              <WildFireImage
-                src={FIRE_IMAGE}
-                alt="fire"
-                width="20"
-                height="15"
-              />
-            </div>
+            <ToggleButton
+              show={showFireData}
+              setShow={setShowFireData}
+              image={FIRE_IMAGE}
+              title={"Wild Fire"}
+            />
           ) : null}
 
           {volcanoesData ? (
-            <div onClick={() => setShowVolcanoesData(!showVolcanoesData)}>
-              Show Volcanoes
-              <WildFireImage
-                src={VOLCANO_IMAGE}
-                alt="Volcanoes"
-                width="20"
-                height="15"
-              />
-            </div>
+            <ToggleButton
+              show={showVolcanoesData}
+              setShow={setShowVolcanoesData}
+              image={VOLCANO_IMAGE}
+              title={"Volcanoes"}
+            />
           ) : null}
 
           {severeStormData ? (
@@ -184,8 +179,12 @@ const View = (props: ViewPropsInterface) => {
         </Map>
 
         <ChooseMapStyleSelect onChange={(evt) => setMapStyle(evt.target.value)}>
-          {MAP_STYLES.map((style, index) => (
-            <option key={style.name} defaultValue={mapType} value={style.url}>
+          {MAP_STYLES.map((style) => (
+            <option
+              key={style.name}
+              selected={mapStyle === style.url}
+              value={style.url}
+            >
               {style.name.toUpperCase()}
             </option>
           ))}
