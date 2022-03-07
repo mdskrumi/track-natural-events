@@ -1,10 +1,10 @@
-import Map from "../Map";
+import SingleMap from "../SingleMap";
 import { FourMapWrapperDiv } from "./style";
 
 const View = () => {
   return (
     <FourMapWrapperDiv>
-      <Map
+      <SingleMap
         divideStyle={{
           top: "0%",
           bottom: "50%",
@@ -13,7 +13,7 @@ const View = () => {
         }}
         mapType={0}
       />
-      <Map
+      <SingleMap
         divideStyle={{
           top: "0%",
           bottom: "45%",
@@ -22,7 +22,7 @@ const View = () => {
         }}
         mapType={1}
       />
-      <Map
+      <SingleMap
         divideStyle={{
           top: "50%",
           bottom: "0%",
@@ -31,7 +31,7 @@ const View = () => {
         }}
         mapType={2}
       />
-      <Map
+      <SingleMap
         divideStyle={{
           top: "50%",
           bottom: "0%",
