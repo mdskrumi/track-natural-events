@@ -16,16 +16,14 @@
     "react-dom": "^17.0.2",
     "react-map-gl": "^7.0.6",
     "react-router-dom": "^6.2.2",
-    "react-scripts": "5.0.0",
     "styled-components": "^5.3.3",
     "typescript": "^4.5.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +44,11 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.22"
+    "@types/styled-components": "^5.1.22",
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10",
+    "@vitejs/plugin-react": "^1.0.7",
+    "typescript": "^4.5.4",
+    "vite": "^2.8.0"
   }
 }
