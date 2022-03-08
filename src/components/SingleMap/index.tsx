@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // View
 import View from "./view";
@@ -32,17 +32,6 @@ const SingleMap = (props: MapPropsInterface) => {
   const [mapStyle, setMapStyle] = useState<string>(
     MAP_STYLES[mapType] ? MAP_STYLES[mapType].url : MAP_STYLES[0].url
   );
-
-  const fetchFireData = async () => {
-    const response = await fetch(
-      "https://eonet.gsfc.nasa.gov/api/v2.1/events"
-    ).then((res) => res.json());
-    console.log(response);
-  };
-
-  useEffect(() => {
-    fetchFireData();
-  }, []);
 
   return (
     <View

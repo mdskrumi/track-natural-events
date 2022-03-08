@@ -29,7 +29,7 @@ export interface ViewPropsInterface {
   setMapStyle: Function;
   MAP_STYLES: MapStyleInterface[];
   MAPBOX_ACCESS_TOKEN: string;
-  divideStyle: DivideStyleInterface | null;
+  divideStyle: DivideStyleInterface;
 }
 
 const View = (props: ViewPropsInterface) => {
@@ -49,9 +49,9 @@ const View = (props: ViewPropsInterface) => {
         initialViewState={initialViewState}
         onViewStateChange={(state: any) => setInitialViewState(state.viewState)}
         controller={true}
-        width={divideStyle ? "50%" : "100%"}
-        height={divideStyle ? "50%" : "100%"}
-        style={divideStyle ? divideStyle : {}}
+        width={"100%"}
+        height={"100%"}
+        style={divideStyle}
       >
         <LocationLatLongDiv>
           {`Latitude: ${initialViewState.latitude.toFixed(
@@ -63,13 +63,12 @@ const View = (props: ViewPropsInterface) => {
 
         <Map mapStyle={mapStyle} mapboxAccessToken={MAPBOX_ACCESS_TOKEN} />
 
-        <ChooseMapStyleSelect onChange={(evt) => setMapStyle(evt.target.value)}>
+        <ChooseMapStyleSelect
+          onChange={(evt) => setMapStyle(evt.target.value)}
+          value={mapStyle}
+        >
           {MAP_STYLES.map((style) => (
-            <option
-              key={style.name}
-              selected={mapStyle === style.url}
-              value={style.url}
-            >
+            <option key={style.name} value={style.url}>
               {style.name.toUpperCase()}
             </option>
           ))}

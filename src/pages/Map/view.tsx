@@ -14,10 +14,12 @@ const View = (props: MapPropsInterface) => {
   return (
     <MapDiv>
       {mapNumber === "1" ? (
-        <SingleMap divideStyle={null} mapType={0} />
-      ) : (
-        <FourMap />
-      )}
+        <SingleMap
+          divideStyle={{ top: "0", bottom: "0", left: "0", right: "0" }}
+          mapType={0}
+        />
+      ) : null}
+      {mapNumber === "4" ? <FourMap /> : null}
     </MapDiv>
   );
 };

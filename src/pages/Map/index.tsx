@@ -3,22 +3,43 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import View from "./view";
 
+import { useAppSelector, useAppDispatch } from "../../redux/hooks";
+import {
+  loadWildFire,
+  loadWildFireSuccess,
+  loadWildFireFailed,
+} from "../../redux/wildfire";
+
 const Map = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [mapNumber, setMapNumber] = useState<string>("");
 
+  // const dispatch = useAppDispatch();
+
+  // useEffect(() => {
+  //   const fetchFireData = async () => {
+  //     dispatch(loadWildFire());
+  //     try {
+  //       const response = await fetch(
+  //         "https://eonet.gsfc.nasa.gov/api/v2.1/events"
+  //       ).then((res) => res.json());
+  //       setData(response);
+  //       setFetchingUser(false);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+  //   fetchFireData();
+  // }, []);
+
   useEffect(() => {
-    if (params) {
-      if (params.number === "1") {
-        setMapNumber(params.number);
-      } else if (params.number === "4") {
-        setMapNumber(params.number);
-      } else {
-        navigate("/");
-      }
+    if (params.number) {
+      setMapNumber(params.number);
+    } else {
+      navigate("/");
     }
-  }, [params, navigate]);
+  }, []);
 
   return <View mapNumber={mapNumber} />;
 };
