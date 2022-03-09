@@ -1,22 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
 
-interface Coordinate {
+export interface CoordinateInterface {
   longitude: number;
   latitude: number;
 }
 
-interface WildfireData {
-  id: number | null;
+export interface WildfireDataInterface {
+  id: string | null;
   title: string | null;
   date: string | null;
-  coordinate: Coordinate | null;
+  coordinate: CoordinateInterface | null;
 }
 
 interface State {
   loading: boolean;
   error: boolean;
-  wildfires: WildfireData[];
+  wildfires: WildfireDataInterface[];
 }
 
 const initialState: State = {
@@ -34,14 +34,17 @@ export const wildfireSlice = createSlice({
       state.error = false;
       state.wildfires = [];
     },
-    loadWildFireSuccess: (state, action: PayloadAction<WildfireData[]>) => {
+    loadWildFireSuccess: (
+      state,
+      action: PayloadAction<WildfireDataInterface[]>
+    ) => {
       console.log(action);
       state.loading = false;
       state.error = false;
       state.wildfires = action.payload;
     },
 
-    loadWildFireFailed: (state, action: PayloadAction<number>) => {
+    loadWildFireFailed: (state) => {
       state.loading = false;
       state.error = true;
       state.wildfires = [];

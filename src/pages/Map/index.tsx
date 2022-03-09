@@ -3,7 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import View from "./view";
 
-import { useAppSelector, useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch } from "../../redux/hooks";
+import {
+  WildfireDataInterface,
+  CoordinateInterface,
+} from "../../redux/wildfire";
 import {
   loadWildFire,
   loadWildFireSuccess,
@@ -15,23 +19,41 @@ const Map = () => {
   const navigate = useNavigate();
   const [mapNumber, setMapNumber] = useState<string>("");
 
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   const fetchFireData = async () => {
-  //     dispatch(loadWildFire());
-  //     try {
-  //       const response = await fetch(
-  //         "https://eonet.gsfc.nasa.gov/api/v2.1/events"
-  //       ).then((res) => res.json());
-  //       setData(response);
-  //       setFetchingUser(false);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-  //   fetchFireData();
-  // }, []);
+  const setWildfiresData = (events: any) => {
+    const wildfires: WildfireDataInterface[] = [];
+    events.forEach((evt: any) => {
+      if (evt.categories[0].id !== 8) return;
+      const id = evt.id;
+      const title = evt.title;
+      const date = evt.geometries[0].date;
+      const coordinate: CoordinateInterface = {
+        longitude: evt.geometries[0].coordinates[0],
+        latitude: evt.geometries[0].coordinates[1],
+      };
+      wildfires.push({ id, title, date, coordinate });
+    });
+    dispatch(loadWildFireSuccess(wildfires));
+  };
+
+  useEffect(() => {
+    const fetchFireData = async () => {
+      dispatch(loadWildFire());
+      try {
+        const response = await fetch(
+          "https://eonet.gsfc.nasa.gov/api/v2.1/events"
+        ).then((res) => res.json());
+        if (response && response.events) {
+          setWildfiresData(response.events);
+        }
+      } catch (err) {
+        dispatch(loadWildFireFailed());
+        console.error(err);
+      }
+    };
+    fetchFireData();
+  }, []);
 
   useEffect(() => {
     if (params.number) {

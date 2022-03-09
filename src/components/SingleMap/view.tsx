@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 
@@ -30,6 +31,7 @@ export interface ViewPropsInterface {
   MAP_STYLES: MapStyleInterface[];
   MAPBOX_ACCESS_TOKEN: string;
   divideStyle: DivideStyleInterface;
+  wildfireLayer: any;
 }
 
 const View = (props: ViewPropsInterface) => {
@@ -41,17 +43,20 @@ const View = (props: ViewPropsInterface) => {
     MAP_STYLES,
     divideStyle,
     MAPBOX_ACCESS_TOKEN,
+    wildfireLayer,
   } = props;
 
   return (
     <MapWrapper>
       <DeckGL
         initialViewState={initialViewState}
-        onViewStateChange={(state: any) => setInitialViewState(state.viewState)}
+        // onViewStateChange={(state: any) => setInitialViewState(state.viewState)}
         controller={true}
+        layers={[wildfireLayer]}
         width={"100%"}
         height={"100%"}
         style={divideStyle}
+        getTooltip={({ object }: any) => object && `${object.title}`}
       >
         <LocationLatLongDiv>
           {`Latitude: ${initialViewState.latitude.toFixed(
@@ -61,7 +66,7 @@ const View = (props: ViewPropsInterface) => {
           )} Zoom: ${initialViewState.zoom.toFixed(0)}`}
         </LocationLatLongDiv>
 
-        <Map mapStyle={mapStyle} mapboxAccessToken={MAPBOX_ACCESS_TOKEN} />
+        <Map mapStyle={mapStyle} mapboxAccessToken={MAPBOX_ACCESS_TOKEN}></Map>
 
         <ChooseMapStyleSelect
           onChange={(evt) => setMapStyle(evt.target.value)}
