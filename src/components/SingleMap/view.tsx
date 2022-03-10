@@ -1,6 +1,7 @@
 import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import ToggleButton from "../ToggleButton";
+import { useParams } from "react-router-dom";
 
 import { useAppSelector } from "../../redux/hooks";
 
@@ -61,7 +62,7 @@ const View = (props: ViewPropsInterface) => {
     showStormLines,
     setShowStormLines,
   } = props;
-
+  const params = useParams();
   const MAPBOX_ACCESS_TOKEN =
     "pk.eyJ1IjoibWRza3J1bWkiLCJhIjoiY2wwZzhlbGkzMDM3dzNqcThjZDh2d2ludiJ9.5ho6NOAH8RLxxq2e36D0Vg";
 
@@ -74,8 +75,8 @@ const View = (props: ViewPropsInterface) => {
         initialViewState={initialViewState}
         controller={true}
         layers={[wildfireLayer, stormLayer]}
-        width={"100%"}
-        height={"100%"}
+        width={params.number === "1" ? "100%" : "50%"}
+        height={params.number === "1" ? "100%" : "50%"}
         style={divideStyle}
         getTooltip={({ object }: any) => object && `${object.title}`}
       >

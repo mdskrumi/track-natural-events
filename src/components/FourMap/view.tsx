@@ -16,7 +16,7 @@ const View = () => {
       <SingleMap
         divideStyle={{
           top: "0%",
-          bottom: "45%",
+          bottom: "50%",
           left: "50%",
           right: "0%",
         }}
