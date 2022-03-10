@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-// import { FlyToInterpolator } from "@deck.gl/core";
-import { LineLayer } from "@deck.gl/layers";
+import { FlyToInterpolator } from "@deck.gl/core";
 
 import { useAppSelector } from "../../redux/hooks";
 import useMarker from "../../hooks/useMarker";
@@ -37,28 +36,54 @@ const SingleMap = (props: MapPropsInterface) => {
   );
   const [wildfireLayer, setWildfireLayer] = useState<any>();
   const [stormLayer, setStormLayer] = useState<any>();
+  const [showFireIcons, setShowFireIcons] = useState<boolean>(false);
+  const [showStormLines, setShowStormLines] = useState<boolean>(false);
 
   const { wildfires } = useAppSelector((state) => state.wildfire);
   const { storms } = useAppSelector((state) => state.storm);
 
   useEffect(() => {
-    setWildfireLayer(useMarker(wildfires, [255, 110, 0]));
-  }, [wildfires]);
+    setWildfireLayer(useMarker(wildfires, [255, 110, 0], showFireIcons));
+    if (showFireIcons) {
+      setInitialViewState({
+        longitude: wildfires[0].coordinate?.longitude,
+        latitude: wildfires[0].coordinate?.latitude,
+        zoom: 8,
+        pitch: 0,
+        bearing: 0,
+        transitionDuration: 3000,
+        transitionInterpolator: new FlyToInterpolator(),
+      });
+    } else {
+      setInitialViewState({
+        longitude: 90,
+        latitude: 23,
+        zoom: 1,
+        pitch: 0,
+        bearing: 0,
+        transitionDuration: 3000,
+        transitionInterpolator: new FlyToInterpolator(),
+      });
+    }
+  }, [wildfires, showFireIcons]);
 
   useEffect(() => {
-    setStormLayer(useLineLayer(storms));
-  }, [storms]);
+    setStormLayer(useLineLayer(storms, showStormLines));
+  }, [storms, showStormLines]);
 
   return (
     <View
       initialViewState={initialViewState}
-      setInitialViewState={setInitialViewState}
       mapStyle={mapStyle}
       setMapStyle={setMapStyle}
       MAP_STYLES={MAP_STYLES}
       divideStyle={divideStyle}
       wildfireLayer={wildfireLayer}
       stormLayer={stormLayer}
+      showFireIcons={showFireIcons}
+      setShowFireIcons={setShowFireIcons}
+      showStormLines={showStormLines}
+      setShowStormLines={setShowStormLines}
     />
   );
 };

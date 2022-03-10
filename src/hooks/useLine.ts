@@ -11,7 +11,7 @@ interface LineLayerDataInterface {
   to: [number | undefined, number | undefined];
 }
 
-const useLineLayer = (data: StormDataInterface[]) => {
+const useLineLayer = (data: StormDataInterface[], showStormLines: boolean) => {
   let stormLayers: any = [];
   data.forEach((storm: StormDataInterface) => {
     if (storm && storm.line && storm.line.length > 1) {
@@ -34,10 +34,10 @@ const useLineLayer = (data: StormDataInterface[]) => {
         id: `line-layer-${storm.id}`,
         data: layer,
         pickable: true,
-        getWidth: 50,
         getSourcePosition: (d: LineLayerDataInterface) => d.from,
         getTargetPosition: (d: LineLayerDataInterface) => d.to,
         getColor: (d: any) => [140, 140, 0],
+        getWidth: showStormLines ? 50 : 0,
       });
 
       stormLayers.push(lineLayer);

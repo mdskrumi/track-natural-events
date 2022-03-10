@@ -1,9 +1,17 @@
-import { useState, useEffect } from "react";
 import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
+import ToggleButton from "../ToggleButton";
+
+import FireImage from "../../assets/images/fire.png";
+import StormImage from "../../assets/images/storm.png";
 
 // Styles
-import { MapWrapper, LocationLatLongDiv, ChooseMapStyleSelect } from "./style";
+import {
+  MapWrapper,
+  LocationLatLongDiv,
+  ChooseMapStyleSelect,
+  ButtonDiv,
+} from "./style";
 
 export interface ViewStateInterface {
   latitude: number;
@@ -25,25 +33,31 @@ export interface DivideStyleInterface {
 
 export interface ViewPropsInterface {
   initialViewState: ViewStateInterface;
-  setInitialViewState: Function;
   mapStyle: string;
   setMapStyle: Function;
   MAP_STYLES: MapStyleInterface[];
   divideStyle: DivideStyleInterface;
   wildfireLayer: any;
   stormLayer: any;
+  showFireIcons: boolean;
+  setShowFireIcons: Function;
+  showStormLines: boolean;
+  setShowStormLines: Function;
 }
 
 const View = (props: ViewPropsInterface) => {
   const {
     initialViewState,
-    setInitialViewState,
     mapStyle,
     setMapStyle,
     MAP_STYLES,
     divideStyle,
     wildfireLayer,
     stormLayer,
+    showFireIcons,
+    setShowFireIcons,
+    showStormLines,
+    setShowStormLines,
   } = props;
 
   const MAPBOX_ACCESS_TOKEN =
@@ -53,7 +67,6 @@ const View = (props: ViewPropsInterface) => {
     <MapWrapper>
       <DeckGL
         initialViewState={initialViewState}
-        // onViewStateChange={(state: any) => setInitialViewState(state.viewState)}
         controller={true}
         layers={[wildfireLayer, stormLayer]}
         width={"100%"}
@@ -81,6 +94,21 @@ const View = (props: ViewPropsInterface) => {
             </option>
           ))}
         </ChooseMapStyleSelect>
+        <ButtonDiv>
+          <ToggleButton
+            title="Wildfires"
+            image={FireImage}
+            show={showFireIcons}
+            setShow={setShowFireIcons}
+          />
+
+          <ToggleButton
+            title="Severe Storms"
+            image={FireImage}
+            show={showStormLines}
+            setShow={setShowStormLines}
+          />
+        </ButtonDiv>
       </DeckGL>
     </MapWrapper>
   );

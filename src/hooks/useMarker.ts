@@ -7,7 +7,7 @@ const ICON_MAPPING = {
 const useMarker = (
   data: any,
   color: [number, number, number],
-  size: number = 3
+  showFireIcons: boolean
 ) => {
   return new IconLayer({
     id: "icon-layer",
@@ -19,7 +19,7 @@ const useMarker = (
     getIcon: () => "marker",
     sizeScale: 15,
     getPosition: (d: any) => [d.coordinate.longitude, d.coordinate.latitude],
-    getSize: () => size,
+    getSize: showFireIcons ? 3 : 0,
     getColor: () => color,
   });
 };
