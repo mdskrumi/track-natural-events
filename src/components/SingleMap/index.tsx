@@ -34,8 +34,8 @@ const SingleMap = (props: MapPropsInterface) => {
   const [mapStyle, setMapStyle] = useState<string>(
     MAP_STYLES[mapType] ? MAP_STYLES[mapType].url : MAP_STYLES[0].url
   );
-  const [wildfireLayer, setWildfireLayer] = useState<any>();
-  const [stormLayer, setStormLayer] = useState<any>();
+  const [wildfireLayer, setWildfireLayer] = useState<any>(null);
+  const [stormLayer, setStormLayer] = useState<any>(null);
   const [showFireIcons, setShowFireIcons] = useState<boolean>(false);
   const [showStormLines, setShowStormLines] = useState<boolean>(false);
 

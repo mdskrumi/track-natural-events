@@ -2,6 +2,8 @@ import Map from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import ToggleButton from "../ToggleButton";
 
+import { useAppSelector } from "../../redux/hooks";
+
 import FireImage from "../../assets/images/fire.png";
 import StormImage from "../../assets/images/storm.png";
 
@@ -63,6 +65,9 @@ const View = (props: ViewPropsInterface) => {
   const MAPBOX_ACCESS_TOKEN =
     "pk.eyJ1IjoibWRza3J1bWkiLCJhIjoiY2wwZzhlbGkzMDM3dzNqcThjZDh2d2ludiJ9.5ho6NOAH8RLxxq2e36D0Vg";
 
+  const { wildfires } = useAppSelector((state) => state.wildfire);
+  const { storms } = useAppSelector((state) => state.storm);
+
   return (
     <MapWrapper>
       <DeckGL
@@ -95,19 +100,23 @@ const View = (props: ViewPropsInterface) => {
           ))}
         </ChooseMapStyleSelect>
         <ButtonDiv>
-          <ToggleButton
-            title="Wildfires"
-            image={FireImage}
-            show={showFireIcons}
-            setShow={setShowFireIcons}
-          />
+          {wildfires.length > 0 ? (
+            <ToggleButton
+              title="Wildfires"
+              image={FireImage}
+              show={showFireIcons}
+              setShow={setShowFireIcons}
+            />
+          ) : null}
 
-          <ToggleButton
-            title="Severe Storms"
-            image={FireImage}
-            show={showStormLines}
-            setShow={setShowStormLines}
-          />
+          {storms.length > 0 ? (
+            <ToggleButton
+              title="Severe Storms"
+              image={StormImage}
+              show={showStormLines}
+              setShow={setShowStormLines}
+            />
+          ) : null}
         </ButtonDiv>
       </DeckGL>
     </MapWrapper>
