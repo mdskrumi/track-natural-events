@@ -29,9 +29,9 @@ export interface ViewPropsInterface {
   mapStyle: string;
   setMapStyle: Function;
   MAP_STYLES: MapStyleInterface[];
-  MAPBOX_ACCESS_TOKEN: string;
   divideStyle: DivideStyleInterface;
   wildfireLayer: any;
+  stormLayer: any;
 }
 
 const View = (props: ViewPropsInterface) => {
@@ -42,9 +42,12 @@ const View = (props: ViewPropsInterface) => {
     setMapStyle,
     MAP_STYLES,
     divideStyle,
-    MAPBOX_ACCESS_TOKEN,
     wildfireLayer,
+    stormLayer,
   } = props;
+
+  const MAPBOX_ACCESS_TOKEN =
+    "pk.eyJ1IjoibWRza3J1bWkiLCJhIjoiY2wwZzhlbGkzMDM3dzNqcThjZDh2d2ludiJ9.5ho6NOAH8RLxxq2e36D0Vg";
 
   return (
     <MapWrapper>
@@ -52,7 +55,7 @@ const View = (props: ViewPropsInterface) => {
         initialViewState={initialViewState}
         // onViewStateChange={(state: any) => setInitialViewState(state.viewState)}
         controller={true}
-        layers={[wildfireLayer]}
+        layers={[wildfireLayer, stormLayer]}
         width={"100%"}
         height={"100%"}
         style={divideStyle}

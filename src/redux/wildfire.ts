@@ -38,7 +38,6 @@ export const wildfireSlice = createSlice({
       state,
       action: PayloadAction<WildfireDataInterface[]>
     ) => {
-      console.log(action);
       state.loading = false;
       state.error = false;
       state.wildfires = action.payload;

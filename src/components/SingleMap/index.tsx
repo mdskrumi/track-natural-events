@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 // import { FlyToInterpolator } from "@deck.gl/core";
+import { LineLayer } from "@deck.gl/layers";
 
 import { useAppSelector } from "../../redux/hooks";
 import useMarker from "../../hooks/useMarker";
+import useLineLayer from "../../hooks/useLine";
 
 // View
 import View from "./view";
@@ -14,9 +16,6 @@ interface MapPropsInterface {
   divideStyle: DivideStyleInterface;
   mapType: number;
 }
-
-const MAPBOX_ACCESS_TOKEN =
-  "pk.eyJ1IjoibWRza3J1bWkiLCJhIjoiY2wwZzhlbGkzMDM3dzNqcThjZDh2d2ludiJ9.5ho6NOAH8RLxxq2e36D0Vg";
 
 const MAP_STYLES: MapStyleInterface[] = [
   { name: "streets", url: `mapbox://styles/mapbox/streets-v11` },
@@ -37,12 +36,18 @@ const SingleMap = (props: MapPropsInterface) => {
     MAP_STYLES[mapType] ? MAP_STYLES[mapType].url : MAP_STYLES[0].url
   );
   const [wildfireLayer, setWildfireLayer] = useState<any>();
+  const [stormLayer, setStormLayer] = useState<any>();
 
   const { wildfires } = useAppSelector((state) => state.wildfire);
+  const { storms } = useAppSelector((state) => state.storm);
 
   useEffect(() => {
     setWildfireLayer(useMarker(wildfires, [255, 110, 0]));
   }, [wildfires]);
+
+  useEffect(() => {
+    setStormLayer(useLineLayer(storms));
+  }, [storms]);
 
   return (
     <View
@@ -52,8 +57,8 @@ const SingleMap = (props: MapPropsInterface) => {
       setMapStyle={setMapStyle}
       MAP_STYLES={MAP_STYLES}
       divideStyle={divideStyle}
-      MAPBOX_ACCESS_TOKEN={MAPBOX_ACCESS_TOKEN}
       wildfireLayer={wildfireLayer}
+      stormLayer={stormLayer}
     />
   );
 };

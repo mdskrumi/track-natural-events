@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import wildfireReducer from "./wildfire";
+import stormReducer from "./storm";
 
 export const store = configureStore({
   reducer: {
     wildfire: wildfireReducer,
+    storm: stormReducer,
   },
 });
 

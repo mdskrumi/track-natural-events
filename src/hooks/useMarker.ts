@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { IconLayer } from "@deck.gl/layers";
 
 const ICON_MAPPING = {
