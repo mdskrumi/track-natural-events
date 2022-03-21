@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
 
-import { CoordinateInterface } from "./wildfire";
-
 export interface SinglePointInterface {
   date: string | null;
   coordinate: CoordinateInterface | null;

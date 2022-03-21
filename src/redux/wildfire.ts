@@ -1,11 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
 
-export interface CoordinateInterface {
-  longitude: number;
-  latitude: number;
-}
-
 export interface WildfireDataInterface {
   id: string | null;
   title: string | null;

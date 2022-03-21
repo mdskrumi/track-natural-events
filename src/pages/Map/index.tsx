@@ -7,7 +7,6 @@ import { useAppDispatch } from "../../redux/hooks";
 
 import {
   WildfireDataInterface,
-  CoordinateInterface,
   loadWildFire,
   loadWildFireSuccess,
   loadWildFireFailed,
@@ -74,6 +73,7 @@ const Map = () => {
         }
       } catch (err) {
         dispatch(loadWildFireFailed());
+        dispatch(loadStormsFailed());
         console.error(err);
       }
     };
