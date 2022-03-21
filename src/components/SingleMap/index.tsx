@@ -35,15 +35,21 @@ const SingleMap = (props: MapPropsInterface) => {
     MAP_STYLES[mapType] ? MAP_STYLES[mapType].url : MAP_STYLES[0].url
   );
   const [wildfireLayer, setWildfireLayer] = useState<any>(null);
+  const [volcanoLayer, setVolcanoLayer] = useState<any>(null);
   const [stormLayer, setStormLayer] = useState<any>(null);
+
   const [showFireIcons, setShowFireIcons] = useState<boolean>(false);
+  const [showVolcanoIcons, setShowVolcanoIcons] = useState<boolean>(false);
   const [showStormLines, setShowStormLines] = useState<boolean>(false);
 
   const { wildfires } = useAppSelector((state) => state.wildfire);
   const { storms } = useAppSelector((state) => state.storm);
+  const { volcanoes } = useAppSelector((state) => state.volcanoes);
 
   useEffect(() => {
-    setWildfireLayer(useMarker(wildfires, [255, 110, 0], showFireIcons));
+    setWildfireLayer(
+      useMarker("fire-icon-layer", wildfires, [255, 110, 0], showFireIcons)
+    );
     if (showFireIcons) {
       setInitialViewState({
         longitude: wildfires[0].coordinate?.longitude,
@@ -68,6 +74,33 @@ const SingleMap = (props: MapPropsInterface) => {
   }, [wildfires, showFireIcons]);
 
   useEffect(() => {
+    setVolcanoLayer(
+      useMarker("volcano-icon-layer", volcanoes, [50, 30, 0], showVolcanoIcons)
+    );
+    if (showVolcanoIcons) {
+      setInitialViewState({
+        longitude: volcanoes[0].coordinate?.longitude,
+        latitude: volcanoes[0].coordinate?.latitude,
+        zoom: 8,
+        pitch: 0,
+        bearing: 0,
+        transitionDuration: 3000,
+        transitionInterpolator: new FlyToInterpolator(),
+      });
+    } else {
+      setInitialViewState({
+        longitude: 90,
+        latitude: 23,
+        zoom: 1,
+        pitch: 0,
+        bearing: 0,
+        transitionDuration: 3000,
+        transitionInterpolator: new FlyToInterpolator(),
+      });
+    }
+  }, [volcanoes, showVolcanoIcons]);
+
+  useEffect(() => {
     setStormLayer(useLineLayer(storms, showStormLines));
   }, [storms, showStormLines]);
 
@@ -79,8 +112,11 @@ const SingleMap = (props: MapPropsInterface) => {
       MAP_STYLES={MAP_STYLES}
       divideStyle={divideStyle}
       wildfireLayer={wildfireLayer}
+      volcanoLayer={volcanoLayer}
       stormLayer={stormLayer}
       showFireIcons={showFireIcons}
+      showVolcanoIcons={showVolcanoIcons}
+      setShowVolcanoIcons={setShowVolcanoIcons}
       setShowFireIcons={setShowFireIcons}
       showStormLines={showStormLines}
       setShowStormLines={setShowStormLines}

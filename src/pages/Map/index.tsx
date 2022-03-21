@@ -19,6 +19,13 @@ import {
   loadStormsFailed,
 } from "../../redux/storm";
 
+import {
+  VolcanoDataInterface,
+  loadVolcanoes,
+  loadVolcanoesSuccess,
+  loadVolcanoesFailed,
+} from "../../redux/volcano";
+
 const Map = () => {
   const params = useParams();
   const navigate = useNavigate();
@@ -28,12 +35,23 @@ const Map = () => {
 
   const setData = (events: any) => {
     const wildfires: WildfireDataInterface[] = [];
+    const volcanoes: VolcanoDataInterface[] = [];
     const storms: StormDataInterface[] = [];
     events.forEach((evt: any) => {
       const id = evt.id;
       const title = evt.title;
       if (evt.categories[0].id === 8) {
         wildfires.push({
+          id,
+          title,
+          date: evt.geometries[0].date,
+          coordinate: {
+            longitude: evt.geometries[0].coordinates[0],
+            latitude: evt.geometries[0].coordinates[1],
+          },
+        });
+      } else if (evt.categories[0].id === 12) {
+        volcanoes.push({
           id,
           title,
           date: evt.geometries[0].date,
@@ -57,6 +75,7 @@ const Map = () => {
     });
 
     dispatch(loadStormsSuccess(storms));
+    dispatch(loadVolcanoesSuccess(volcanoes));
     dispatch(loadWildFireSuccess(wildfires));
   };
 
@@ -64,6 +83,7 @@ const Map = () => {
     const fetchFireData = async () => {
       dispatch(loadWildFire());
       dispatch(loadStorms());
+      dispatch(loadVolcanoes());
       try {
         const response = await fetch(
           "https://eonet.gsfc.nasa.gov/api/v2.1/events"
@@ -74,6 +94,7 @@ const Map = () => {
       } catch (err) {
         dispatch(loadWildFireFailed());
         dispatch(loadStormsFailed());
+        dispatch(loadVolcanoesFailed());
         console.error(err);
       }
     };

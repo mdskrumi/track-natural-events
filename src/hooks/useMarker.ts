@@ -5,12 +5,13 @@ const ICON_MAPPING = {
 };
 
 const useMarker = (
+  id: string,
   data: any,
   color: [number, number, number],
   showFireIcons: boolean
 ) => {
   return new IconLayer({
-    id: "icon-layer",
+    id,
     data,
     pickable: true,
     iconAtlas:

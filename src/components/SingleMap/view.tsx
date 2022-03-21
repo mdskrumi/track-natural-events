@@ -7,6 +7,7 @@ import { useAppSelector } from "../../redux/hooks";
 
 import FireImage from "../../assets/images/fire.png";
 import StormImage from "../../assets/images/storm.png";
+import VolcanoImage from "../../assets/images/volcano.png";
 
 // Styles
 import {
@@ -41,9 +42,12 @@ export interface ViewPropsInterface {
   MAP_STYLES: MapStyleInterface[];
   divideStyle: DivideStyleInterface;
   wildfireLayer: any;
-  stormLayer: any;
   showFireIcons: boolean;
   setShowFireIcons: Function;
+  setShowVolcanoIcons: Function;
+  volcanoLayer: any;
+  showVolcanoIcons: boolean;
+  stormLayer: any;
   showStormLines: boolean;
   setShowStormLines: Function;
 }
@@ -61,6 +65,9 @@ const View = (props: ViewPropsInterface) => {
     setShowFireIcons,
     showStormLines,
     setShowStormLines,
+    volcanoLayer,
+    showVolcanoIcons,
+    setShowVolcanoIcons,
   } = props;
   const params = useParams();
   const MAPBOX_ACCESS_TOKEN =
@@ -68,13 +75,14 @@ const View = (props: ViewPropsInterface) => {
 
   const { wildfires } = useAppSelector((state) => state.wildfire);
   const { storms } = useAppSelector((state) => state.storm);
+  const { volcanoes } = useAppSelector((state) => state.volcanoes);
 
   return (
     <MapWrapper>
       <DeckGL
         initialViewState={initialViewState}
         controller={true}
-        layers={[wildfireLayer, stormLayer]}
+        layers={[wildfireLayer, stormLayer, volcanoLayer]}
         width={params.number === "1" ? "100%" : "50%"}
         height={params.number === "1" ? "100%" : "50%"}
         style={divideStyle}
@@ -107,6 +115,15 @@ const View = (props: ViewPropsInterface) => {
               image={FireImage}
               show={showFireIcons}
               setShow={setShowFireIcons}
+            />
+          ) : null}
+
+          {volcanoes.length > 0 ? (
+            <ToggleButton
+              title="Volcanoes"
+              image={VolcanoImage}
+              show={showVolcanoIcons}
+              setShow={setShowVolcanoIcons}
             />
           ) : null}
 
