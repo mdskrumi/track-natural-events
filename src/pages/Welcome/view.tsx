@@ -23,7 +23,10 @@ const View = (props: WelcomePagePropsInterface) => {
         >
           4x4
         </MapNumberButton>
-        <MapNumberButton onClick={() => handleOnMapSelect("/map/1")}>
+        <MapNumberButton
+          className="1x1_button"
+          onClick={() => handleOnMapSelect("/map/1")}
+        >
           1x1
         </MapNumberButton>
       </MapNumberButtonDiv>

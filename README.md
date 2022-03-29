@@ -21,4 +21,3 @@ To run tests
 ```bash
     yarn run cypress open
 ```
-
