@@ -8,6 +8,7 @@ import { useAppSelector } from "../../redux/hooks";
 import FireImage from "../../assets/images/fire.png";
 import StormImage from "../../assets/images/storm.png";
 import VolcanoImage from "../../assets/images/volcano.png";
+import IceImage from "../../assets/images/iceberg.png";
 
 // Styles
 import {
@@ -50,6 +51,9 @@ export interface ViewPropsInterface {
   stormLayer: any;
   showStormLines: boolean;
   setShowStormLines: Function;
+  iceLayer: any;
+  showIceIcons: boolean;
+  setShowIceIcons: Function;
 }
 
 const View = (props: ViewPropsInterface) => {
@@ -68,6 +72,9 @@ const View = (props: ViewPropsInterface) => {
     volcanoLayer,
     showVolcanoIcons,
     setShowVolcanoIcons,
+    iceLayer,
+    showIceIcons,
+    setShowIceIcons,
   } = props;
   const params = useParams();
   const MAPBOX_ACCESS_TOKEN =
@@ -76,13 +83,14 @@ const View = (props: ViewPropsInterface) => {
   const { wildfires } = useAppSelector((state) => state.wildfire);
   const { storms } = useAppSelector((state) => state.storm);
   const { volcanoes } = useAppSelector((state) => state.volcanoes);
+  const { ices } = useAppSelector((state) => state.ice);
 
   return (
     <MapWrapper>
       <DeckGL
         initialViewState={initialViewState}
         controller={true}
-        layers={[wildfireLayer, stormLayer, volcanoLayer]}
+        layers={[wildfireLayer, stormLayer, volcanoLayer, iceLayer]}
         width={params.number === "1" ? "100%" : "50%"}
         height={params.number === "1" ? "100%" : "50%"}
         style={divideStyle}
@@ -115,6 +123,15 @@ const View = (props: ViewPropsInterface) => {
               image={FireImage}
               show={showFireIcons}
               setShow={setShowFireIcons}
+            />
+          ) : null}
+
+          {ices.length > 0 ? (
+            <ToggleButton
+              title="Iceberg"
+              image={IceImage}
+              show={showIceIcons}
+              setShow={setShowIceIcons}
             />
           ) : null}
 

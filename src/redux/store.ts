@@ -3,12 +3,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import wildfireReducer from "./wildfire";
 import stormReducer from "./storm";
 import volcanoesReducer from "./volcano";
+import iceReducer from "./ice";
 
 export const store = configureStore({
   reducer: {
     wildfire: wildfireReducer,
     storm: stormReducer,
     volcanoes: volcanoesReducer,
+    ice: iceReducer,
   },
 });
 

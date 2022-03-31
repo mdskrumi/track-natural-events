@@ -37,14 +37,17 @@ const SingleMap = (props: MapPropsInterface) => {
   const [wildfireLayer, setWildfireLayer] = useState<any>(null);
   const [volcanoLayer, setVolcanoLayer] = useState<any>(null);
   const [stormLayer, setStormLayer] = useState<any>(null);
+  const [iceLayer, setIceLayer] = useState<any>(null);
 
   const [showFireIcons, setShowFireIcons] = useState<boolean>(false);
   const [showVolcanoIcons, setShowVolcanoIcons] = useState<boolean>(false);
   const [showStormLines, setShowStormLines] = useState<boolean>(false);
+  const [showIceIcons, setShowIceIcons] = useState<boolean>(false);
 
   const { wildfires } = useAppSelector((state) => state.wildfire);
   const { storms } = useAppSelector((state) => state.storm);
   const { volcanoes } = useAppSelector((state) => state.volcanoes);
+  const { ices } = useAppSelector((state) => state.ice);
 
   useEffect(() => {
     setWildfireLayer(
@@ -72,6 +75,33 @@ const SingleMap = (props: MapPropsInterface) => {
       });
     }
   }, [wildfires, showFireIcons]);
+
+  useEffect(() => {
+    setIceLayer(
+      useMarker("ice-icon-layer", ices, [90, 120, 250], showIceIcons)
+    );
+    if (showIceIcons) {
+      setInitialViewState({
+        longitude: ices[0].coordinate?.longitude,
+        latitude: ices[0].coordinate?.latitude,
+        zoom: 8,
+        pitch: 0,
+        bearing: 0,
+        transitionDuration: 3000,
+        transitionInterpolator: new FlyToInterpolator(),
+      });
+    } else {
+      setInitialViewState({
+        longitude: 90,
+        latitude: 23,
+        zoom: 1,
+        pitch: 0,
+        bearing: 0,
+        transitionDuration: 3000,
+        transitionInterpolator: new FlyToInterpolator(),
+      });
+    }
+  }, [ices, showIceIcons]);
 
   useEffect(() => {
     setVolcanoLayer(
@@ -120,6 +150,9 @@ const SingleMap = (props: MapPropsInterface) => {
       setShowFireIcons={setShowFireIcons}
       showStormLines={showStormLines}
       setShowStormLines={setShowStormLines}
+      iceLayer={iceLayer}
+      showIceIcons={showIceIcons}
+      setShowIceIcons={setShowIceIcons}
     />
   );
 };
