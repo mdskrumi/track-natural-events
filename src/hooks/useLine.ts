@@ -34,8 +34,8 @@ const useLineLayer = (data: StormDataInterface[], showStormLines: boolean) => {
         id: `line-layer-${storm.id}`,
         data: layer,
         pickable: true,
-        getSourcePosition: (d: LineLayerDataInterface) => d.from,
-        getTargetPosition: (d: LineLayerDataInterface) => d.to,
+        getSourcePosition: (d: any) => d.from,
+        getTargetPosition: (d: any) => d.to,
         getColor: (d: any) => [140, 140, 0],
         getWidth: showStormLines ? 50 : 0,
       });
